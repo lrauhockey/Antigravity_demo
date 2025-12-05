@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - PredictionMarket{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1>Active Markets</h1>
+    <p class="subtitle">Place your bets on trending prediction markets</p>
+</div>
+
+<div class="market-grid">
+    {% for market in markets %}
+    <div class="market-card" onclick="window.location.href='{{ url_for('market_detail', market_id=market.id) }}'">
+        <span class="market-type-badge badge-{{ market.market_type }}">
+            {{ 'Binary Market' if market.market_type == 'binary' else 'Over/Under Market' }}
+        </span>
+
+        <h2 class="market-question">{{ market.question }}</h2>
+
+        <div class="sentiment-section">
+            <div class="sentiment-label">Market Sentiment</div>
+            <div class="sentiment-bar-container">
+                {% if market.market_type == 'binary' %}
+                <div class="sentiment-bar" style="width: {{ market.sentiment.option_a }}%">
+                    {{ market.sentiment.option_a }}%
+                </div>
+                {% else %}
+                <div class="sentiment-bar" style="width: {{ market.sentiment.over }}%">
+                    {{ market.sentiment.over }}%
+                </div>
+                {% endif %}
+            </div>
+            <div class="sentiment-labels">
+                {% if market.market_type == 'binary' %}
+                <div class="sentiment-option">
+                    <span class="option-dot"></span>
+                    <span>{{ market.option_a }} ({{ market.sentiment.option_a }}%)</span>
+                </div>
+                <div class="sentiment-option">
+                    <span class="option-dot"></span>
+                    <span>{{ market.option_b }} ({{ market.sentiment.option_b }}%)</span>
+                </div>
+                {% else %}
+                <div class="sentiment-option">
+                    <span class="option-dot"></span>
+                    <span>Over {{ market.target_value }} {{ market.unit }} ({{ market.sentiment.over }}%)</span>
+                </div>
+                <div class="sentiment-option">
+                    <span class="option-dot"></span>
+                    <span>Under {{ market.target_value }} {{ market.unit }} ({{ market.sentiment.under }}%)</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Volume</div>
+                <div class="stat-value">${{ "%.2f"|format(market.stats.total_volume) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Your Position</div>
+                <div class="stat-value">${{ "%.2f"|format(market.stats.user_position) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Bets</div>
+                <div class="stat-value">{{ market.stats.total_bets }}</div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if not markets %}
+<div class="empty-state">
+    <p>No active markets at the moment.</p>
+</div>
+{% endif %}
+{% endblock %}

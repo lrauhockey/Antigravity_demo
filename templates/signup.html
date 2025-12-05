@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up - PredictionMarket{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1 class="logo-large">PredictionMarket</h1>
+            <p class="subtitle">Create an account and get $1,000 to start</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('signup') }}" class="auth-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-input" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-input" required>
+            </div>
+
+            <button type="submit" class="btn-primary">Sign Up</button>
+        </form>
+
+        <div class="auth-footer">
+            Already have an account? <a href="{{ url_for('login') }}">Login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

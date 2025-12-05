@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PredictionMarket - Market Detail Mockup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .market-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .market-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .market-type-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .badge-binary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .badge-overunder {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .market-question {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            color: #fff;
+        }
+
+        .sentiment-section {
+            margin-bottom: 30px;
+        }
+
+        .sentiment-label {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .sentiment-bar-container {
+            position: relative;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 30px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sentiment-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 20px;
+            font-weight: 600;
+            font-size: 18px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .sentiment-bar-nvidia {
+            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+            width: 65%;
+        }
+
+        .sentiment-bar-over {
+            background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
+            width: 58%;
+        }
+
+        .sentiment-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            padding: 0 10px;
+        }
+
+        .sentiment-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .option-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot-green {
+            background: #10b981;
+        }
+
+        .dot-red {
+            background: #ef4444;
+        }
+
+        .dot-blue {
+            background: #3b82f6;
+        }
+
+        .dot-orange {
+            background: #f59e0b;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .betting-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .betting-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .bet-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .bet-button {
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .bet-button:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .amount-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .amount-input {
+            flex: 1;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .amount-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .place-bet-button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .place-bet-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .wallet-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .wallet-amount {
+            color: #10b981;
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .bet-options {
+                grid-template-columns: 1fr;
+            }
+
+            .market-question {
+                font-size: 20px;
+            }
+
+            .wallet-display {
+                position: static;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .market-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .market-card:nth-child(2) {
+            animation-delay: 0.2s;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wallet-display">
+        💰 Balance: <span class="wallet-amount">$1,000.00</span>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">PredictionMarket</div>
+            <div class="subtitle">UI Mockup - Market Detail View</div>
+        </div>
+
+        <div class="market-grid">
+            <!-- Binary Market Example -->
+            <div class="market-card">
+                <span class="market-type-badge badge-binary">Binary Market</span>
+                <h2 class="market-question">Who will win the AI chip race?</h2>
+
+                <div class="sentiment-section">
+                    <div class="sentiment-label">Market Sentiment</div>
+                    <div class="sentiment-bar-container">
+                        <div class="sentiment-bar sentiment-bar-nvidia">
+                            65%
+                        </div>
+                    </div>
+                    <div class="sentiment-labels">
+                        <div class="sentiment-option">
+                            <span class="option-dot dot-green"></span>
+                            <span>NVidia (65%)</span>
+                        </div>
+                        <div class="sentiment-option">
+                            <span class="option-dot dot-red"></span>
+                            <span>Google (35%)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Volume</div>
+                        <div class="stat-value">$12,450</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Your Position</div>
+                        <div class="stat-value">$0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Total Bets</div>
+                        <div class="stat-value">87</div>
+                    </div>
+                </div>
+
+                <div class="betting-section">
+                    <div class="betting-title">Place Your Bet</div>
+                    <div class="bet-options">
+                        <button class="bet-button green">🟢 NVidia</button>
+                        <button class="bet-button red">🔴 Google</button>
+                    </div>
+                    <div class="amount-input-group">
+                        <input type="number" class="amount-input" placeholder="Enter amount ($)" value="100">
+                        <button class="place-bet-button">Place Bet</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Over/Under Market Example -->
+            <div class="market-card">
+                <span class="market-type-badge badge-overunder">Over/Under Market</span>
+                <h2 class="market-question">Length of TWiT on Sunday</h2>
+
+                <div class="sentiment-section">
+                    <div class="sentiment-label">Market Sentiment (Target: 3.5 hours)</div>
+                    <div class="sentiment-bar-container">
+                        <div class="sentiment-bar sentiment-bar-over">
+                            58%
+                        </div>
+                    </div>
+                    <div class="sentiment-labels">
+                        <div class="sentiment-option">
+                            <span class="option-dot dot-blue"></span>
+                            <span>Over 3.5 hrs (58%)</span>
+                        </div>
+                        <div class="sentiment-option">
+                            <span class="option-dot dot-orange"></span>
+                            <span>Under 3.5 hrs (42%)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Volume</div>
+                        <div class="stat-value">$8,920</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Your Position</div>
+                        <div class="stat-value">$0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Total Bets</div>
+                        <div class="stat-value">63</div>
+                    </div>
+                </div>
+
+                <div class="betting-section">
+                    <div class="betting-title">Place Your Bet</div>
+                    <div class="bet-options">
+                        <button class="bet-button blue">📈 Over 3.5 hrs</button>
+                        <button class="bet-button orange">📉 Under 3.5 hrs</button>
+                    </div>
+                    <div class="amount-input-group">
+                        <input type="number" class="amount-input" placeholder="Enter amount ($)" value="100">
+                        <button class="place-bet-button">Place Bet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple interactivity for demo
+        document.querySelectorAll('.bet-button').forEach(button => {
+            button.addEventListener('click', function () {
+                document.querySelectorAll('.bet-button').forEach(b => {
+                    b.style.opacity = '0.5';
+                });
+                this.style.opacity = '1';
+            });
+        });
+
+        // Animate sentiment bars on load
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.sentiment-bar').forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 100);
+            });
+        });
+    </script>
+</body>
+
+</html>

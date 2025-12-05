@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}{{ market.question }} - PredictionMarket{% endblock %}
+
+{% block content %}
+<div class="market-detail-container">
+    <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
+
+    <div class="market-card-detail">
+        <span class="market-type-badge badge-{{ market.market_type }}">
+            {{ 'Binary Market' if market.market_type == 'binary' else 'Over/Under Market' }}
+        </span>
+
+        <h1 class="market-question">{{ market.question }}</h1>
+
+        <div class="sentiment-section">
+            <div class="sentiment-label">Market Sentiment</div>
+            <div class="sentiment-bar-container">
+                {% if market.market_type == 'binary' %}
+                <div class="sentiment-bar" style="width: {{ market.sentiment.option_a }}%">
+                    {{ market.sentiment.option_a }}%
+                </div>
+                {% else %}
+                <div class="sentiment-bar" style="width: {{ market.sentiment.over }}%">
+                    {{ market.sentiment.over }}%
+                </div>
+                {% endif %}
+            </div>
+            <div class="sentiment-labels">
+                {% if market.market_type == 'binary' %}
+                <div class="sentiment-option">
+                    <span class="option-dot"></span>
+                    <span>{{ market.option_a }} ({{ market.sentiment.option_a }}%)</span>
+                </div>
+                <div class="sentiment-option">
+                    <span class="option-dot"></span>
+                    <span>{{ market.option_b }} ({{ market.sentiment.option_b }}%)</span>
+                </div>
+                {% else %}
+                <div class="sentiment-option">
+                    <span class="option-dot"></span>
+                    <span>Over {{ market.target_value }} {{ market.unit }} ({{ market.sentiment.over }}%)</span>
+                </div>
+                <div class="sentiment-option">
+                    <span class="option-dot"></span>
+                    <span>Under {{ market.target_value }} {{ market.unit }} ({{ market.sentiment.under }}%)</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Volume</div>
+                <div class="stat-value">${{ "%.2f"|format(market.stats.total_volume) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Your Position</div>
+                <div class="stat-value">${{ "%.2f"|format(market.stats.user_position) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Bets</div>
+                <div class="stat-value">{{ market.stats.total_bets }}</div>
+            </div>
+        </div>
+
+        <div class="betting-section">
+            <div class="betting-title">Place Your Bet</div>
+            <form method="POST" action="{{ url_for('place_bet') }}" id="betForm">
+                <input type="hidden" name="market_id" value="{{ market.id }}">
+
+                <div class="bet-options">
+                    {% if market.market_type == 'binary' %}
+                    <button type="button" class="bet-button" data-option="option_a">
+                        {{ market.option_a }}
+                    </button>
+                    <button type="button" class="bet-button" data-option="option_b">
+                        {{ market.option_b }}
+                    </button>
+                    {% else %}
+                    <button type="button" class="bet-button" data-option="over">
+                        📈 Over {{ market.target_value }} {{ market.unit }}
+                    </button>
+                    <button type="button" class="bet-button" data-option="under">
+                        📉 Under {{ market.target_value }} {{ market.unit }}
+                    </button>
+                    {% endif %}
+                </div>
+
+                <input type="hidden" name="option" id="selectedOption">
+
+                <div class="amount-input-group">
+                    <input type="number" name="amount" class="amount-input" placeholder="Enter amount ($)" min="1"
+                        max="{{ balance }}" step="0.01" value="100" required>
+                    <button type="submit" class="place-bet-button">Place Bet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Bet option selection
+    document.querySelectorAll('.bet-button').forEach(button => {
+        button.addEventListener('click', function () {
+            // Remove selection from all buttons
+            document.querySelectorAll('.bet-button').forEach(b => {
+                b.classList.remove('selected');
+            });
+
+            // Add selection to clicked button
+            this.classList.add('selected');
+
+            // Set hidden input value
+            document.getElementById('selectedOption').value = this.dataset.option;
+        });
+    });
+
+    // Form validation
+    document.getElementById('betForm').addEventListener('submit', function (e) {
+        const selectedOption = document.getElementById('selectedOption').value;
+        if (!selectedOption) {
+            e.preventDefault();
+            alert('Please select a betting option.');
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PredictionMarket{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    {% if session.user_id %}
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="{{ url_for('dashboard') }}" class="logo">PredictionMarket</a>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('dashboard') }}"
+                class="nav-item {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="{{ url_for('create_market') }}"
+                class="nav-item {% if request.endpoint == 'create_market' %}active{% endif %}">
+                <span class="nav-icon">➕</span>
+                <span class="nav-text">Create Market</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="wallet-display">
+                💰 <span class="wallet-amount">${{ "%.2f"|format(balance) }}</span>
+            </div>
+            <div class="user-info">
+                <span class="username">{{ session.username }}</span>
+                <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        {% endif %}
+
+        <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    {% if session.user_id %}
+    </div>
+    {% endif %}
+
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>
