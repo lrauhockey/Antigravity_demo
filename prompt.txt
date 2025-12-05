@@ -1,0 +1,25 @@
+Role: Expert Python Full-Stack Developer Project: Create "PredictionMarket" (A Polymarket Clone) Tech Stack: Python (Flask), SQLite, HTML/CSS (Modern Dark Mode), Vanilla JS. Constraints:
+* Port: 5111
+* Venv: ../dev/v313a/bin/activate
+Project Requirements: I need a functioning betting app for a demo. It must include:
+1. Authentication: Simple Login/Signup (Username/Password).
+2. Wallet: New users automatically get $1,000 (virtual money) so I can demo betting immediately.
+3. Market Types:
+    * Binary: Question with Choice A vs Choice B.
+    * Over/Under: Question with a target number (User bets Over or Under).
+4. Visuals:
+    * Dashboard: Sidebar for navigation, main feed for markets.
+    * Market View: A "Tug of War" sentiment bar. If 70% of money is on Option A, the bar is 70% that color.
+5. Data Seeding (Required):
+    * On app launch, check if DB is empty. If yes, create these two markets:
+            1. Over/Under: "Length of TWiT on Sunday" (Target: 3.5 hrs)
+            2. Binary: "Who will win the AI chip race?" (NVidia vs Google)
+Execution Plan (Follow Strict Order):
+STEP 1: The Design & Schema
+* Create the SQL Schema logic. You must decide the table structure (Users, Markets, Bets) to support the features above.
+* Create a UI Mockup (HTML/CSS only). Focus on the "Market Detail" screen showing the sentiment bar.
+* STOP HERE. Do not write the Python backend yet. Present the HTML and the Schema plan for my review.
+STEP 2: The Build (Wait for my "Proceed" command)
+* Once I approve Step 1, you will build the Flask backend, connect the SQLite DB, and implement the betting logic.
+STEP 3: The Demo Prep
+* Ensure the "Data Seeding" is active so when I load the page, the TWiT and NVidia bets are already there.
